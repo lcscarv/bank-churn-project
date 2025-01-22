@@ -172,7 +172,7 @@ def train_and_validate(
 
         tuned_model = train_model(training_data, space)
         model_f1_score = evaluate_model(tuned_model, training_data)
-    model_name = f"xgb_{datetime.datetime.today().strftime(format='%Y-%m-%d')}_score_{model_f1_score:.2f}.pkl"
+    model_name = f"xgb_{datetime.datetime.today().strftime(format='%Y-%m-%d')}_score_{model_f1_score:.4f}.pkl"
 
     logger.debug("Model training pipeline finished. Storing model in /models folder.")
 
