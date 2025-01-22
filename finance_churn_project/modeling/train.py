@@ -175,5 +175,9 @@ def train_and_validate(
     model_name = f"xgb_{datetime.datetime.today().strftime(format='%Y-%m-%d')}_score_{model_f1_score:.2f}.pkl"
 
     logger.debug("Model training pipeline finished. Storing model in /models folder.")
+
+    os.makedirs('models', exist_ok=True)
     with open(os.path.join("models", model_name), 'wb') as f:
         pickle.dump(tuned_model, f)
+
+    logger.debug("Finished pipeline")
