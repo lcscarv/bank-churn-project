@@ -12,7 +12,6 @@ from hyperopt import (
     Trials,
     STATUS_OK
 )
-from processing.data_loader import csv_loader
 from processing.data_processing import processing_pipeline
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score, accuracy_score
