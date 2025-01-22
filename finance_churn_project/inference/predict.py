@@ -9,7 +9,7 @@ from xgboost import XGBClassifier
 from processing.data_processing import processing_pipeline
 from utils.general_utils import get_best_model_path
 
-logging.basicConfig(level=logging.DEBUG,
+logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     handlers=[logging.StreamHandler()])
 
@@ -29,14 +29,14 @@ def generate_predictions(
 
 
 def make_inference(customer_data: pd.DataFrame) -> None:
-    logger.info('Starting Inference')
+    logger.info('Starting inference')
     file_list = glob.glob(os.path.join('models', '*'))
     best_model_path = get_best_model_path(file_list)
     with open(best_model_path, 'rb') as f:
         xgb_model = pickle.load(f)
 
     customer_data_processed = processing_pipeline(customer_data)
-    logger.info('Generation Predictions')
+    logger.info('Generating predictions')
     predictions = generate_predictions(xgb_model, customer_data_processed, customer_data['RowNumber'])
 
     os.makedirs('predictions', exist_ok=True)
@@ -44,4 +44,4 @@ def make_inference(customer_data: pd.DataFrame) -> None:
     predictions_path = os.path.join('predictions', predictions_name)
     logger.info(f'Storing predictions at {predictions_path}')
     predictions.to_csv(predictions_path, index=False)
-    logger.info(f'End Pipeline')
+    logger.info(f'End pipeline')
