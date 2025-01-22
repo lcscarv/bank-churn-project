@@ -2,6 +2,7 @@ import os
 import datetime
 import logging
 import pickle
+import warnings
 
 import mlflow
 import pandas as pd
@@ -18,6 +19,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score, accuracy_score
 from xgboost import XGBClassifier
 
+warnings.filterwarnings("ignore", category=FutureWarning)
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     handlers=[logging.StreamHandler()])

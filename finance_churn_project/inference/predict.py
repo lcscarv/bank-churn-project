@@ -3,12 +3,14 @@ import datetime
 import logging
 import glob
 import pickle
+import warnings
 
 import pandas as pd
 from xgboost import XGBClassifier
 from processing.data_processing import processing_pipeline
 from utils.general_utils import get_best_model_path
 
+warnings.filterwarnings("ignore", category=FutureWarning)
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     handlers=[logging.StreamHandler()])
