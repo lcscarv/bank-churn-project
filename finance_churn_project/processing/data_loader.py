@@ -31,3 +31,12 @@ def obtain_most_recent_file(folder_path: str) -> str:
         raise ValueError(f"No files in directory {folder_path}. Check your path or files")
     latest_file = max(file_list, key=os.path.getctime)
     return latest_file
+
+
+def data_load_pipeline(folder_path: str) -> pd.DataFrame | None:
+    logger.debug('Starting data load')
+    most_recent_file = obtain_most_recent_file(folder_path)
+    logger.debug(f'Most recent file path: {most_recent_file}. Loading data')
+    data = csv_loader(most_recent_file)
+    logger.debug('Data loaded')
+    return data
