@@ -1,4 +1,19 @@
+import os
 import re
+import glob
+
+
+def get_file_list(folder_path: str) -> list[str] | None:
+    file_list = glob.glob(os.path.join(folder_path, '*'))
+    if not file_list:
+        raise ValueError(f"No files in directory {folder_path}. Check your path or files")
+    return file_list
+
+
+def obtain_most_recent_file(folder_path: str) -> str:
+    file_list = get_file_list(folder_path)
+    latest_file = max(file_list, key=os.path.getctime)  # type: ignore
+    return latest_file
 
 
 def obtain_score_from_name(file_name: str) -> float | None:
