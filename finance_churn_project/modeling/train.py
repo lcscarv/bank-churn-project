@@ -132,8 +132,7 @@ def evaluate_model(
 
 
 def train_and_validate(
-    customer_churn_df: pd.DataFrame,
-    training_data: dict[str, pd.DataFrame | pd.Series]
+    customer_churn_df: pd.DataFrame
 ) -> None:
 
     mlflow.set_tracking_uri(os.environ.get('URL_MLFLOW', '../mlruns'))
