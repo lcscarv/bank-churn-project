@@ -2,6 +2,7 @@ import os
 import datetime
 import logging
 import pickle
+import warnings
 
 import mlflow
 import pandas as pd
@@ -18,7 +19,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score, accuracy_score
 from xgboost import XGBClassifier
 
-logging.basicConfig(level=logging.DEBUG,
+warnings.filterwarnings("ignore", category=FutureWarning)
+logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     handlers=[logging.StreamHandler()])
 
@@ -30,11 +32,11 @@ def generate_train_test_valid_data(customer_churn_df: pd.DataFrame) -> dict[str,
     x = x.drop(columns='Exited')
     y = customer_churn_df.Exited
 
-    logger.debug("Start training data split")
+    logger.info("Start training data split")
     x_train, x_not_train, y_train, y_not_train = train_test_split(x, y, test_size=0.3, stratify=y, random_state=0)
     x_valid, x_test, y_valid, y_test = train_test_split(x_not_train, y_not_train, test_size=0.5, stratify=y_not_train, random_state=0)
 
-    logger.debug("Start training data processing")
+    logger.info("Start training data processing")
     x_train = processing_pipeline(x_train)
     x_valid = processing_pipeline(x_valid)
     x_test = processing_pipeline(x_test)
@@ -90,7 +92,7 @@ def train_model(
         return {'loss': 1 - score, 'status': STATUS_OK}
     trials = Trials()
 
-    logger.debug("Start hyperparameter tuning")
+    logger.info("Start hyperparameter tuning")
     hyperparams = fmin(fn=objective,
                        space=space,
                        algo=tpe.suggest,
@@ -99,9 +101,9 @@ def train_model(
 
     best_hyperparams = space_eval(space, hyperparams)
 
-    logger.debug("Done. Logging parameters")
+    logger.info("Done. Logging parameters")
     mlflow.log_params(best_hyperparams)
-    logger.debug("Model fit and prediction.")
+    logger.info("Model fit and prediction.")
     model = XGBClassifier(**best_hyperparams)
     model.fit(x_train, y_train)
     pred = model.predict(x_valid)
@@ -116,7 +118,7 @@ def evaluate_model(
     model: XGBClassifier,
     training_data: dict[str, pd.DataFrame | pd.Series]
 ) -> float:
-    logger.debug("Start model evaluation")
+    logger.info("Start model evaluation")
 
     x_valid = training_data.get('x_valid')
     y_valid = training_data.get('y_valid')
@@ -172,12 +174,12 @@ def train_and_validate(
 
         tuned_model = train_model(training_data, space)
         model_f1_score = evaluate_model(tuned_model, training_data)
-    model_name = f"xgb_{datetime.datetime.today().strftime(format='%Y-%m-%d')}_score_{model_f1_score:.2f}.pkl"
-
-    logger.debug("Model training pipeline finished. Storing model in /models folder.")
+    model_name = f"xgb_{datetime.datetime.today().strftime(format='%Y-%m-%d')}_score_{model_f1_score:.4f}.pkl"
+    model_path = os.path.join("models", model_name)
+    logger.info(f"Model training pipeline finished. Storing model in {model_path}.")
 
     os.makedirs('models', exist_ok=True)
-    with open(os.path.join("models", model_name), 'wb') as f:
+    with open(model_path, 'wb') as f:
         pickle.dump(tuned_model, f)
 
-    logger.debug("Finished pipeline")
+    logger.info("Finished pipeline")
