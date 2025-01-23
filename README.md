@@ -205,7 +205,7 @@ graph LR
 ### Directory Layout
 
 ```arduino
-WTM PSIA/
+finance_churn_project/
 ├── src/
 │   ├── processing/
 │   │   ├── data_loader.py
