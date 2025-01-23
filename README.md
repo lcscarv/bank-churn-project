@@ -63,20 +63,84 @@ Purpose: Track and monitor model training and performance metrics for auditing a
 ### Prerequisites
 
 - **Python 3.11**
-- **Docker** (for Mlflow server, if desired)
+- **Docker** (for Mlflow server, if desired)]
+
+This project supports creating and activating virtual environments using venv and conda. Follow the instructions below based on your preferred tool:
+
+**Creating virtual environment with venv**
+```bash
+python -m venv venv
+```
+
+or
+
+```bash
+python3 -m venv venv
+```
+- **Activation**
+
+  - **Linux/MacOS**
+      ```bash
+      source venv/bin/activate
+      ```
+
+  - **Windows (Command Prompt)**
+      ```bash
+      venv\Scripts\activate
+      ```
+
+  - **Windows (Command Prompt)**
+      ```bash
+      .\venv\Scripts\Activate
+      ```
+  
+
+  - **Install dependencies**:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+  - **Deactivation**
+
+    ```bash
+    deactivate
+    ```
+**Creating virtual environment with conda**
+ ```bash
+  conda create --name my_env python=3.11
+  ```
+  - **Activation**
+      ```bash
+      conda activate my_env
+      ```
+  - **Install dependencies**:
+
+      ```bash
+      pip install -r requirements.txt
+      ```
+
+  - **Deactivation**
+
+      ```bash
+      conda deactivate
+      ```
 
 ### Managing Data
 
+To generate the data folders, use the following command in the main directory:
+```bash
+make create_data_folders
+```
 For this application to work, data should be stored correctly. Both training and inference data must be stored in the `data` folder, as follows:
 - Training Data -> `data/training/raw/training_data.csv`
 - Inference Data -> `data/inference/raw/inference_data.csv`
+
 
 ### Environment Variables
 For the development of BCCD and its modules, we use a .env file to manage essential environment variables. This file ensures that all necessary configurations are available during the project's execution.
 
 Using Visual Studio Code (VSCode), the .env file is automatically loaded in modes configured by launch.json. This allows developers to run or debug the code without manually loading environment variables.
-
-If you are not using VSCode or prefer to manually load environment variables in the code, you can use the dotenv library to load the .env file since Python does not natively support this. **Remember that using this library requires code changes**. 
 
 To configure the environment for the directory, create a copy of the .env.example file and rename it to .env in the root of the directory. The file has the following structure; **don't forget to replace it with appropriate values, as the ones below are illustrative and do not represent actual values**:
 
@@ -89,7 +153,8 @@ URL_MLFLOW='your-mlflow-url' #Default: http://localhost:5000/
 
 
 ```
-
+If you are not using VSCode or prefer to manually load environment variables in the code, you can use the dotenv library to load the .env file since Python does not natively support this. **Remember that using this library requires code changes**.
+ 
 In case you don't want to apply any code changes, you can make use of the following alternatives:
 
 **Setting Environment Variables Directly in the Terminal - Linux/macOS**
@@ -205,7 +270,7 @@ graph LR
 ### Directory Layout
 
 ```arduino
-finance_churn_project/
+WTM PSIA/
 ├── src/
 │   ├── processing/
 │   │   ├── data_loader.py
